@@ -18,4 +18,4 @@ plt.subplot(1,3,3)
 plt.plot(t, Z[:, int(Nx/2)])
 plt.tight_layout()
 
-plt.savefig("poisson.png")
+plt.savefig("poisson_"+str(Nx)+".png")
