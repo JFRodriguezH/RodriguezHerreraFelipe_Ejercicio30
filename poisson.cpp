@@ -6,6 +6,7 @@
 float const D = 1.0;
 float const S = 1.0;
 float const tf = 1.0;
+float const error = pow(10, -5);
 
 
 void buildg(float** g, int Nx, float Dt, float Dx);
@@ -28,17 +29,36 @@ int main(int argv, char** argc){
 	float* temp_A = new float[Nx];
 	float* sol_A = new float[Nx];
 	
+	float previo = temp_A[Nx/2];
+	
 	float t = 0;
 	outfile.open("poisson.dat");	
-	for(int i=0;i<Nt;i++){
+	outfile<<t<<" ";
+	for(int j=0;j<Nx;j++){
+		outfile<<sol_A[j]<<" ";
+	}
+	outfile<<std::endl;
+	t += Dt;
+	avance(g_A, temp_A, sol_A, Nx, Dt);
+	float nuevo = sol_A[Nx/2];
+	
+	while((nuevo-previo)>error){
         outfile<<t<<" ";
 		for(int j=0;j<Nx;j++){
 			outfile<<sol_A[j]<<" ";
 		}
 		outfile<<std::endl;
 		t += Dt;
+		previo = sol_A[Nx/2];
 		avance(g_A, temp_A, sol_A, Nx, Dt);
+		nuevo = sol_A[Nx/2];
 	}
+	outfile<<t<<" ";
+	for(int j=0;j<Nx;j++){
+		outfile<<sol_A[j]<<" ";
+	}
+	outfile<<std::endl;
+	
 	outfile.close();
 	delete [] g_A;
 	delete [] temp_A;
