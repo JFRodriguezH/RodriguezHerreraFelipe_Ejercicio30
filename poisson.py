@@ -1,24 +1,32 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-data = np.loadtxt("poisson.dat")
+n = np.array([10, 20, 30, 40, 50, 60, 70, 80, 90, 100])
+N = np.array([])
+cent = np.array([])
+con = np.array([])
 
-Nx = len(data[0, :])-1
+for i in n:
+	data = np.loadtxt("poisson_"+str(i)+".dat")
+	N = np.append(N, len(data[:, 0]))
+	num = data[-1, int(i/2)]
+	ana = 0.5
+	cent = np.append(cent, np.abs((num-ana)/num))
+	con = np.append(con, np.abs(data[-1, int(i/2)]-data[-2, int(i/2)]))
+	
 
-x = np.linspace(-1,1,Nx)
-t = data[:, 0]
-X, T = np.meshgrid(x, t)
-Z = data[:, 1:]
-print(Z[-1, int(Nx/2)]-Z[-2, int(Nx/2)])
 plt.figure(figsize=(12,4))
-plt.subplot(1,3,1)
-plt.imshow(Z, aspect=0.1)
-plt.subplot(1,3,2)
-plt.plot(x, Z[-1, :])
-plt.scatter(x[int(Nx/2-1)], Z[-1, int(Nx/2-1)], label=Z[-1, int(Nx/2-1)])
-plt.legend()
-plt.subplot(1,3,3)
-plt.plot(t, Z[:, int(Nx/2)])
+plt.subplot(131)
+plt.ylabel('N iteraciones')
+plt.xlabel('N_x')
+plt.plot(n, N)
+plt.subplot(132)
+plt.ylabel('Error centro (%)')
+plt.xlabel('N_x')
+plt.plot(n, ((1e2)*cent))
+plt.subplot(133)
+plt.ylabel('Error convergencia x10^6')
+plt.xlabel('N_x')
+plt.plot(n, ((1e6)*con))
 plt.tight_layout()
-
-plt.savefig("poisson_"+str(Nx)+".png")
+plt.savefig('resultado.png')

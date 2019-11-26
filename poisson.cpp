@@ -3,36 +3,40 @@
 #include<math.h>
 
 /*dP/dt = D* d^2P/dx^2 + s */
-float const D = 1.0;
-float const S = 1.0;
-float const tf = 1.0;
-float const error = pow(10, -5);
+double const D = 1.0;
+double const S = 1.0;
+double const tf = 1.0;
+double const error = pow(10, -6);
 
 
-void buildg(float** g, int Nx, float Dt, float Dx);
-void avance(float** g, float* prev, float* next, int Nx, float Dt);
+void buildg(double** g, int Nx, double Dt, double Dx);
+void avance(double** g, double* prev, double* next, int Nx, double Dt);
 std::ofstream outfile;
 
 int main(int argv, char** argc){
-	std::string num = argc[1];
-	int Nx = std::stoi(num);
-    float Dx = 2.0/Nx;
-    float Dt = (Dx*Dx)/(2.0*D);
+	int Nx = atoi(argc[1])+1;
+    double Dx = 2.0/Nx;
+    double Dt = (Dx*Dx)/(2.0*D);
 	int Nt = tf/Dt;
 	
-	float** g_A = new float*[Nx];
+	double** g_A = new double*[Nx];
 	for(int i=0;i<Nx;i++){
-		g_A[i] = new float[Nx];
+		g_A[i] = new double[Nx];
 	}
 	buildg(g_A, Nx, Dt, Dx);
 	
-	float* temp_A = new float[Nx];
-	float* sol_A = new float[Nx];
+	double* temp_A = new double[Nx];
+	double* sol_A = new double[Nx];
 	
-	float previo = temp_A[Nx/2];
+	double previo = temp_A[Nx/2];
 	
-	float t = 0;
-	outfile.open("poisson.dat");	
+	std::string filename = "poisson_";
+	filename.append(argc[1]);
+	filename.append(".dat");
+
+	outfile.open(filename);
+	
+	double t = 0;
 	outfile<<t<<" ";
 	for(int j=0;j<Nx;j++){
 		outfile<<sol_A[j]<<" ";
@@ -40,7 +44,7 @@ int main(int argv, char** argc){
 	outfile<<std::endl;
 	t += Dt;
 	avance(g_A, temp_A, sol_A, Nx, Dt);
-	float nuevo = sol_A[Nx/2];
+	double nuevo = sol_A[Nx/2];
 	
 	while((nuevo-previo)>error){
         outfile<<t<<" ";
@@ -53,11 +57,6 @@ int main(int argv, char** argc){
 		avance(g_A, temp_A, sol_A, Nx, Dt);
 		nuevo = sol_A[Nx/2];
 	}
-	outfile<<t<<" ";
-	for(int j=0;j<Nx;j++){
-		outfile<<sol_A[j]<<" ";
-	}
-	outfile<<std::endl;
 	
 	outfile.close();
 	delete [] g_A;
@@ -67,8 +66,8 @@ int main(int argv, char** argc){
 }
 
 
-void buildg(float** g, int Nx, float Dt, float Dx){
-	float temp = D*Dt/(Dx*Dx);
+void buildg(double** g, int Nx, double Dt, double Dx){
+	double temp = D*Dt/(Dx*Dx);
 	for(int i=1;i<Nx-1;i++){
 		for(int j=1;j<Nx-1;j++){
 			if(i==j){
@@ -84,8 +83,8 @@ void buildg(float** g, int Nx, float Dt, float Dx){
 	}
 }
 
-void avance(float** g, float* prev, float* next, int Nx, float Dt){
-	float temp;
+void avance(double** g, double* prev, double* next, int Nx, double Dt){
+	double temp;
 	for(int j=1;j<Nx-1;j++){
 		temp = 0;
 		for(int k=0;k<Nx;k++){
