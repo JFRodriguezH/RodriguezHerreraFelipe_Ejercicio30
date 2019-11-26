@@ -14,7 +14,7 @@ void avance(double** g, double* prev, double* next, int Nx, double Dt);
 std::ofstream outfile;
 
 int main(int argv, char** argc){
-	int Nx = atoi(argc[1])+1;
+	int Nx = atoi(argc[1]);
     double Dx = 2.0/Nx;
     double Dt = (Dx*Dx)/(2.0*D);
 	int Nt = tf/Dt;

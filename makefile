@@ -16,4 +16,4 @@ poisson.out : poisson.cpp
 	c++ poisson.cpp -o poisson.out
 
 clean : 
-	rm poisson_10.dat poisson_20.dat poisson_30.dat poisson_40.dat poisson_50.dat poisson_60.dat poisson_70.dat poisson_80.dat poisson_90.dat poisson_100.dat
+	rm poisson_10.dat poisson_20.dat poisson_30.dat poisson_40.dat poisson_50.dat poisson_60.dat poisson_70.dat poisson_80.dat poisson_90.dat poisson_100.dat poisson.out resultado.png
